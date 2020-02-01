@@ -1,13 +1,14 @@
-﻿using Nordlys.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Nordlys.DependencyInjection;
 
 namespace Nordlys.Game.Sessions
 {
     public class SessionService : IService
     {
-        public void Register(DependencyRegistrar dependencyRegistrar)
+        public void Register(IServiceCollection serviceDescriptors)
         {
-            dependencyRegistrar.RegisterSingleton<SessionController>();
-            dependencyRegistrar.RegisterSingleton<SessionFactory>();
+            serviceDescriptors.AddSingleton<SessionController>();
+            serviceDescriptors.AddSingleton<SessionFactory>();
         }
     }
 }

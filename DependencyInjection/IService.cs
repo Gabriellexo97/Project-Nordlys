@@ -1,7 +1,9 @@
-﻿namespace Nordlys.DependencyInjection
+﻿using Microsoft.Extensions.DependencyInjection;
+
+namespace Nordlys.DependencyInjection
 {
     public interface IService
     {
-        void Register(DependencyRegistrar dependencyRegistrar);
+        void Register(IServiceCollection serviceDescriptors);
     }
 }

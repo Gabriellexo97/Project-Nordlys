@@ -4,9 +4,11 @@ namespace Nordlys.Core.Console.Commands
 {
     class ClearCommand : ICommand
     {
-        public async Task RunAsync(params object[] args)
+        public string Command => "clear";
+        
+        public Task RunAsync(params object[] args)
         {
-            System.Console.Clear();
+            return Task.Run(System.Console.Clear);
         }
     }
 }

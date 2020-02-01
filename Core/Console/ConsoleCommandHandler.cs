@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Nordlys.Core.Console.Commands;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,17 +9,13 @@ namespace Nordlys.Core.Console
 {
     public class ConsoleCommandHandler
     {
-        private readonly Dictionary<string, ICommand> commands;
         private readonly ILogger<ConsoleCommandHandler> logger;
+        private readonly Dictionary<string, ICommand> commands;
 
-        public ConsoleCommandHandler(ILogger<ConsoleCommandHandler> logger)
+        public ConsoleCommandHandler(ILogger<ConsoleCommandHandler> logger, IEnumerable<ICommand> commands)
         {
             this.logger = logger;
-
-            commands = new Dictionary<string, ICommand>
-            {
-                { "clear", new ClearCommand() }
-            };
+            this.commands = commands.ToDictionary(command => command.Command);
         }
 
         public async Task TryHandleCommandAsync(string input)

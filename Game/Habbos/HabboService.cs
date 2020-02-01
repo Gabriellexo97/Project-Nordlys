@@ -1,13 +1,14 @@
-﻿using Nordlys.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Nordlys.DependencyInjection;
 
 namespace Nordlys.Game.Habbos
 {
     class HabboService : IService
     {
-        public void Register(DependencyRegistrar dependencyRegistrar)
+        public void Register(IServiceCollection serviceDescriptors)
         {
-            dependencyRegistrar.RegisterSingleton<HabboController>();
-            dependencyRegistrar.RegisterSingleton<HabboDao>();
+            serviceDescriptors.AddSingleton<HabboController>();
+            serviceDescriptors.AddSingleton<HabboDao>();
         }
     }
 }

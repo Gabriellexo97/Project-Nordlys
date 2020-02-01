@@ -1,9 +1,13 @@
-﻿using Nordlys.Communication.Messages;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Nordlys.Communication.Messages;
 using Nordlys.Core.Console;
 using Nordlys.DependencyInjection;
 using Nordlys.Game.Habbos;
 using Nordlys.Game.Sessions;
 using Nordlys.Network.Game;
+using Nordlys.Util;
+using System;
 using System.Threading.Tasks;
 
 namespace Nordlys
@@ -12,20 +16,22 @@ namespace Nordlys
     {
         static async Task Main()
         {
-            DependencyRegistrar dependencyRegistrar = new DependencyRegistrar();
+            IServiceCollection serviceDescriptors = new ServiceCollection();
+            serviceDescriptors.AddLogging(builder => builder.AddConsole());
+            serviceDescriptors.AddSingleton<MessageHandler>();
+            serviceDescriptors.AddSingleton<GameNetworkListener>();
+            serviceDescriptors.AddSingleton<ConsoleCommandHandler>();
 
-            dependencyRegistrar.RegisterSingleton<MessageHandler>();
-            dependencyRegistrar.RegisterSingleton<GameNetworkListener>();
-            dependencyRegistrar.RegisterSingleton<ConsoleCommandHandler>();
+            serviceDescriptors.AddService<SessionService>();
+            serviceDescriptors.AddService<HabboService>();
 
-            dependencyRegistrar.RegisterService<SessionService>();
-            dependencyRegistrar.RegisterService<HabboService>();
+            serviceDescriptors.RegisterConsoleCommands();
 
-            dependencyRegistrar.BuildServiceProvider();
+            ServiceProvider serviceProvider = serviceDescriptors.BuildServiceProvider();
 
-            dependencyRegistrar.Resolve<MessageHandler>().RegisterEvents(dependencyRegistrar.ServiceProvider);
+            //serviceProvider.GetService<MessageHandler>().RegisterEvents();
 
-            GameNetworkListener listener = dependencyRegistrar.Resolve<GameNetworkListener>();
+            GameNetworkListener listener = serviceProvider.GetService<GameNetworkListener>();
 
             await listener.StartAsync(30000);
 
@@ -35,7 +41,7 @@ namespace Nordlys
 
                 if (input.Length > 0)
                 {
-                    await dependencyRegistrar.Resolve<ConsoleCommandHandler>().TryHandleCommandAsync(input);
+                    await serviceProvider.GetService<ConsoleCommandHandler>().TryHandleCommandAsync(input);
                 }
             }
         }
