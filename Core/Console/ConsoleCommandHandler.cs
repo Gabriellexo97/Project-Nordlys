@@ -23,7 +23,7 @@ namespace Nordlys.Core.Console
             int spacePosition = input.IndexOf(' ');
             string header = spacePosition >= 0 ? input.Substring(0, spacePosition) : input;
 
-            if (commands.Any(command => command.Key == header))
+            if (commands.TryGetValue(header, out ICommand command))
             {
                 await commands[header].RunAsync(input.Substring(spacePosition + 1).Split(' '));
             }

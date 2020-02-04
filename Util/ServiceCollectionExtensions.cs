@@ -7,9 +7,9 @@ namespace Nordlys.Util
 {
     public static class ServiceCollectionExtensions
     {
-        public static void AddService<T>(this IServiceCollection serviceDescriptors) where T : IService
+        public static void AddService<T>(this IServiceCollection serviceDescriptors) where T : IService, new()
         {
-            (typeof(T).GetConstructor(System.Type.EmptyTypes).Invoke(new object[] { }) as IService).Register(serviceDescriptors);
+            new T().Register(serviceDescriptors);
         }
 
         public static void RegisterConsoleCommands(this IServiceCollection serviceDescriptors)

@@ -8,7 +8,8 @@ namespace Nordlys.Core.Console.Commands
         
         public Task RunAsync(params object[] args)
         {
-            return Task.Run(System.Console.Clear);
+            System.Console.Clear();
+            return Task.CompletedTask;
         }
     }
 }
