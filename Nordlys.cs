@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Nordlys.Communication.Messages;
 using Nordlys.Core.Console;
@@ -28,6 +29,8 @@ namespace Nordlys
             serviceDescriptors.RegisterConsoleCommands();
 
             ServiceProvider serviceProvider = serviceDescriptors.BuildServiceProvider();
+
+            await serviceProvider.GetRequiredService<HabboDbContext>().Database.MigrateAsync();
 
             //serviceProvider.GetService<MessageHandler>().RegisterEvents();
 
