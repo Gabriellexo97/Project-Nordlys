@@ -8,7 +8,7 @@ namespace Nordlys.Game.Habbos
         public void Register(IServiceCollection serviceDescriptors)
         {
             serviceDescriptors.AddSingleton<HabboController>();
-            serviceDescriptors.AddSingleton<HabboDao>();
+            serviceDescriptors.AddDbContext<HabboDbContext>();
         }
     }
 }

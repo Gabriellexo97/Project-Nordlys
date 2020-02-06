@@ -1,40 +1,25 @@
-﻿using Nordlys.DependencyInjection;
-using System.Collections.Generic;
+﻿using Microsoft.Extensions.DependencyInjection;
+using System.Linq;
 
 namespace Nordlys.Game.Habbos
 {
     public class HabboController
     {
-        private readonly Dictionary<int, Habbo> habbos;
-        private readonly HabboDao dao;
+        private readonly HabboDbContext dbContext;
 
-        public HabboController(HabboDao dao)
+        public HabboController(HabboDbContext dbContext)
         {
-            this.dao = dao;
-
-            habbos = new Dictionary<int, Habbo>();
+            this.dbContext = dbContext;
         }
 
-        //public Habbo GetHabbo(int id)
-        //{
-        //    if (habbos.TryGetValue(id, out Habbo habbo))
-        //    {
-        //        return habbo;
-        //    }
-
-        //    return dao.
-        //}
+        public Habbo GetHabbo(int id)
+        {
+            return dbContext.Find<Habbo>(id);
+        }
 
         public Habbo Authenticate(string sso)
         {
-            Habbo habbo = dao.Authenticate(sso);
-            
-            if (habbo != null && habbos.ContainsKey(habbo.Id))
-            {
-                habbos[habbo.Id] = habbo;
-            }
-
-            return habbo;
+            return dbContext.Habbos.Where(habbo => habbo.AuthenticationTicket == sso).FirstOrDefault();
         }
     }
 }
