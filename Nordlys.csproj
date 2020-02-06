@@ -24,7 +24,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Communication\Messages\Incoming\Handshake\" />
     <Folder Include="Communication\Messages\Outgoing\" />
   </ItemGroup>
 

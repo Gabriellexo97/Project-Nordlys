@@ -28,11 +28,11 @@ namespace Nordlys
 
             serviceDescriptors.RegisterConsoleCommands();
 
+            serviceDescriptors.RegisterMessageEvents();
+
             ServiceProvider serviceProvider = serviceDescriptors.BuildServiceProvider();
 
             await serviceProvider.GetRequiredService<HabboDbContext>().Database.MigrateAsync();
-
-            //serviceProvider.GetService<MessageHandler>().RegisterEvents();
 
             GameNetworkListener listener = serviceProvider.GetService<GameNetworkListener>();
 

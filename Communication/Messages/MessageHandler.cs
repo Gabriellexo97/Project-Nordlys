@@ -15,17 +15,13 @@ namespace Nordlys.Communication.Messages
         private readonly Dictionary<short, IMessageEvent> messageEvents;
         private readonly ILogger<MessageHandler> logger;
 
-        public MessageHandler(ILogger<MessageHandler> logger)
+        public MessageHandler(ILogger<MessageHandler> logger, IEnumerable<IMessageEvent> messageEvents)
         {
             this.logger = logger;
 
-            messageEvents = new Dictionary<short, IMessageEvent>();
-        }
+            this.messageEvents = messageEvents.ToDictionary(messageEvent => messageEvent.Header);
 
-        public void RegisterEvents(ServiceProvider serviceProvider)
-        {
-            // TODO: Finish this off
-            logger.LogDebug("Loaded {0} message events", messageEvents.Count);
+            logger.LogDebug("Loaded {0} message events", this.messageEvents.Count);
         }
 
         public async Task TryHandleAsync(Session session, ClientMessage message)
